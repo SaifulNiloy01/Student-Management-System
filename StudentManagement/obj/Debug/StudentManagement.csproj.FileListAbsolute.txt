@@ -44,3 +44,7 @@ C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\Enti
 C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\EntityFramework.xml
 C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\EntityFramework.SqlServer.xml
 C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\obj\Debug\StudentManagement.csprojResolveAssemblyReference.cache
+C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\PagedList.dll
+C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\PagedList.Mvc.dll
+C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\PagedList.xml
+C:\Users\User\source\repos\24-05-18\StudentManagement\StudentManagement\bin\PagedList.Mvc.xml

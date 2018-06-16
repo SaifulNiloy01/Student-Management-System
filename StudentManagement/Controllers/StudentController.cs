@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using StudentManagement.DAL;
 using StudentManagement.Models;
+using PagedList;
 
 namespace StudentManagement.Controllers
 {
@@ -16,24 +17,74 @@ namespace StudentManagement.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Student
-        public ActionResult Index()
-        {
-            return View(db.Students.ToList());
-        }
+        //public ActionResult Index()
+        //{
+        //    return View(db.Students.ToList());
+        //}
 
-        // GET: Student/Details/5
-        public ActionResult Details(int? id)
+        //// GET: Student/Details/5
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Student student = db.Students.Find(id);
+        //    if (student == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(student);
+        //}
+
+        //public ActionResult Index(string sortOrder)
+        //public ViewResult Index(string sortOrder, string searchString)
+        //{ 
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            if (id == null)
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                page = 1;
             }
-            Student student = db.Students.Find(id);
-            if (student == null)
+            else
             {
-                return HttpNotFound();
+                searchString = currentFilter;
             }
-            return View(student);
+
+            ViewBag.CurrentFilter = searchString;
+
+            var students = from s in db.Students
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    students = students.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+
+                //The first time the Index page is requested, there's no query string. The students are displayed in ascending order by LastName     
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+            //return View(students.ToList());
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(students.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Student/Create
